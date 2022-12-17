@@ -129,9 +129,8 @@ int main() {
         cin.getline(command, 30);
         //iterate over the neighbors for the currentroom and stop when you get a match
         if (strcmp(currentRoom->direction, command) == 0) {
-                currentRoom = currentRoom->neighbor;//write a function to get a nextroom
+                currentRoom = currentRoom->neighbor;
         }
-
     }
     return 0;
 }

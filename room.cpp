@@ -1,6 +1,7 @@
 #include <iostream>
 #include "room.h"
 #include <string.h>
+#include <vector>
 using namespace std;
 
 void Room::setLabel(char *newlabel) {
@@ -13,10 +14,4 @@ void Room::setDescription(char *newdescription) {
 
 char* Room::getDescription() {
     return description;
-}
-
-void Room::setExit(char *newdirection, Room *newneighbor) {
-    strcpy(direction, newdirection);
-    neighbor = newneighbor;
-
 }
