@@ -2,7 +2,6 @@
 #include <cstring>
 #include <string.h>
 #include "room.h"
-#include "item.h"
 #include <vector>
 using namespace std;
 
@@ -10,7 +9,6 @@ using namespace std;
 int main() {
 
     cout << "You are on NW 23rd Avenue in Portland, Oregon! Have fun!" << endl;
-
     //CREATING ROOMS
     vector<Room*> rooms;
     Room *lifeOfPie = new Room;
@@ -74,62 +72,79 @@ int main() {
     snowPeak->setDescription("You are at Snow Peak. Have some pasta!");
     rooms.push_back(snowPeak);
 
+    char north[10] = "north";
+    char east[10] = "east";
+    char south[10] = "south";
+    char west[10] = "west";
+
 
     //NEIGHBORING ROOMS
-    lifeOfPie->setExit("north", littleBigBurger);
-    lifeOfPie->setExit("east", emergencyRoom);
-    lifeOfPie->setExit("west", grassa);
+    lifeOfPie->setExit(north, littleBigBurger);
+    lifeOfPie->setExit(east, emergencyRoom);
+    lifeOfPie->setExit(west, grassa);
 
-    emergencyRoom->setExit("north", ERparking); 
-    emergencyRoom->setExit("south", rehab);
-    emergencyRoom->setExit("west", lifeOfPie);
+    emergencyRoom->setExit(north, ERparking); 
+    emergencyRoom->setExit(south, rehab);
+    emergencyRoom->setExit(west, lifeOfPie);
 
-    ERparking->setExit("north", bambooSushi);
-    ERparking->setExit("south", emergencyRoom);
+    ERparking->setExit(north, bambooSushi);
+    ERparking->setExit(south, emergencyRoom);
 
-    littleBigBurger->setExit("north",jackInTheBox);
-    littleBigBurger->setExit("south",lifeOfPie);
+    littleBigBurger->setExit(north,jackInTheBox);
+    littleBigBurger->setExit(south,lifeOfPie);
 
-    grassa->setExit("north",khaoSoy);
-    grassa->setExit("east",lifeOfPie);
-    grassa->setExit("west",snowPeak);
-    grassa->setExit("south",saltAndStraw);
+    grassa->setExit(north,khaoSoy);
+    grassa->setExit(east,lifeOfPie);
+    grassa->setExit(west,snowPeak);
+    grassa->setExit(south,saltAndStraw);
 
-    caseStudyCoffee->setExit("north", saltAndStraw);
+    caseStudyCoffee->setExit(north, saltAndStraw);
 
-    fedEx->setExit("west",saltAndStraw);
+    fedEx->setExit(west,saltAndStraw);
 
-    bambooSushi->setExit("south",ERparking);
-    bambooSushi->setExit("west",jackInTheBox);
+    bambooSushi->setExit(south,ERparking);
+    bambooSushi->setExit(west,jackInTheBox);
 
-    rehab->setExit("north", emergencyRoom);
-    rehab->setExit("east", potteryBarn);
+    rehab->setExit(north, emergencyRoom);
+    rehab->setExit(east, potteryBarn);
 
-    pineStateBiscuits->setExit("east", jackInTheBox);
+    pineStateBiscuits->setExit(east, jackInTheBox);
 
-    jackInTheBox->setExit("east", bambooSushi);
-    jackInTheBox->setExit("south", ERparking);
+    jackInTheBox->setExit(east, bambooSushi);
+    jackInTheBox->setExit(south, ERparking);
 
-    khaoSoy->setExit("south", grassa);
+    khaoSoy->setExit(south, grassa);
 
-    potteryBarn->setExit("west", rehab);
+    potteryBarn->setExit(west, rehab);
 
-    snowPeak->setExit("east", grassa);
+    snowPeak->setExit(east, grassa);
+
+    saltAndStraw->setExit(north, grassa);
+    saltAndStraw->setExit(east, fedEx);
+    saltAndStraw->setExit(south, caseStudyCoffee);
 
 
     bool cont = true;
-    char command[30];
+    char command[10];
     Room *currentRoom = lifeOfPie;
 
     while (cont == true) {
         cout << currentRoom->description << endl;
-        cout << "Exits ";
+        cout << endl;
+        
+        cout << "Exits: ";
         
 
-        cin.getline(command, 30);
-        //iterate over the neighbors for the currentroom and stop when you get a match
-        if (strcmp(currentRoom->direction, command) == 0) {
-                currentRoom = currentRoom->neighbor;
+        cin.getline(command, 10);
+        
+        //need to look through all the map instances within the map for the currentroom
+        if (currentRoom->checkExit(command) == true) {
+            cout <<"CHECKEXIT IS TRUE";
+            //currentRoom = the room of mapped value for
+            //currentRoom = currentRoom->exits.at(command);//issue
+
+            currentRoom = currentRoom->getNextRoom(command);
+
         }
     }
     return 0;

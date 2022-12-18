@@ -1,6 +1,7 @@
 //room
 #pragma once
 #include <vector>
+#include <unordered_map>
 using namespace std;
 
 class Room {
@@ -12,16 +13,9 @@ class Room {
     void setDescription(char newdescription[80]);
     char* getDescription();
 
-    class Exit {
-        char direction[10];
-        Room *neighbor;
-        
-        vector<Exit*>exits;
-        Exit *newexit = new Exit;
-        void setExit(Exit *newexit);
-
-    };
+//use a map for the exits instead of a vector
+    unordered_map<char*, Room*>exits;
+    void setExit(char*, Room*);
+    Room* getNextRoom(char*);
+    bool checkExit(char*);
 };
-
-
-
