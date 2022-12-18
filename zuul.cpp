@@ -7,8 +7,7 @@ using namespace std;
 
 
 int main() {
-
-    cout << "You are on NW 23rd Avenue in Portland, Oregon! Have fun!" << endl;
+    cout << "You are on NW 23rd Avenue in Portland, Oregon! Collect all 5 items and drop them at FedEx!" << endl;
     //CREATING ROOMS
     vector<Room*> rooms;
     Room *lifeOfPie = new Room;
@@ -72,11 +71,27 @@ int main() {
     snowPeak->setDescription("You are at Snow Peak. Have some pasta!");
     rooms.push_back(snowPeak);
 
+    //ITEMS
+    Item *iceCream = new Item;
+    iceCream->setName("icecream");
+    saltAndStraw->setItem(iceCream);
+    Item *coffee = new Item;
+    coffee->setName("coffee");
+    caseStudyCoffee->setItem(coffee);
+    Item *pamphlet = new Item;
+    pamphlet->setName("pamphlet");
+    rehab->setItem(pamphlet);
+    Item *bandaid = new Item;
+    bandaid->setName("bandaid");
+    emergencyRoom->setItem(bandaid);
+    Item *pot = new Item;
+    pot->setName("pot");
+    potteryBarn->setItem(pot);
+
     char north[10] = "north";
     char east[10] = "east";
     char south[10] = "south";
     char west[10] = "west";
-
 
     //NEIGHBORING ROOMS
     lifeOfPie->setExit(north, littleBigBurger);
@@ -123,28 +138,76 @@ int main() {
     saltAndStraw->setExit(east, fedEx);
     saltAndStraw->setExit(south, caseStudyCoffee);
 
+    //user inventory
+    vector<Item*>userInventory;
 
     bool cont = true;
-    char command[10];
-    Room *currentRoom = lifeOfPie;
+    char command[20];
+    Room *currentRoom = lifeOfPie;//set current room to lifeOfPie
+    char item[20]; 
 
     while (cont == true) {
-        cout << currentRoom->description << endl;
+        cout << endl <<currentRoom->description << endl;
+        cout << "Item in this room: ";
+        currentRoom->printItems();
         cout << endl;
         
-        cout << "Exits: ";
-        
-
-        cin.getline(command, 10);
+        cout << "Enter a command (north, east, south, west, get, drop, inventory, quit): ";
+        cin.getline(command, 20);
         
         //need to look through all the map instances within the map for the currentroom
-        if (currentRoom->checkExit(command) == true) {
-            cout <<"CHECKEXIT IS TRUE";
-            //currentRoom = the room of mapped value for
-            //currentRoom = currentRoom->exits.at(command);//issue
+        if (currentRoom->checkExit(command) == true) {//command is either north, east, south, or west
+            currentRoom = currentRoom->getNextRoom(command);//currentroom becomes the nextroom corresponded with the exit
+        }
 
-            currentRoom = currentRoom->getNextRoom(command);
-
+        else if ((command[0] == 'g') && (command[1] == 'e')) {//GET ITEM
+            //if there is only one item, get that, if not ask what item
+            if (currentRoom->getInventorySize() == 0) {//no items in roomInventory
+                cout << "No items in this room!" << endl;
+            }
+            else if (currentRoom->getInventorySize() == 1) {//one item in roomInventory
+                //append first item from roomInventory to userInventory
+                userInventory.push_back(currentRoom->roomInventory.front());
+                cout << "Item has been added to your inventory!" << endl;
+                //take out item from roomInventory
+                currentRoom->deleteItem(0);
+            }
+            else {//multiple items in roomInventory
+                cout << "Which item would you like to get: ";
+                cin.getline(item, 20);
+                currentRoom->whichItem(item);
+                //if (currentRoom->whichItem(item)== true)//check if it exists and return
+            }
+        }
+        
+        else if ((command[0] == 'd') && (command[1] == 'r')) {//DROP ITEM
+            if (userInventory.size() == 0) {//no items in userInventory
+                cout << "No items in your inventory!" << endl;
+            }
+            else if (userInventory.size() == 1) {//one item in userInventory
+                //drop the item
+                userInventory.erase(userInventory.begin() + 0);
+                cout << "Item has been dropped!" << endl;
+            }
+            else {//multiple items in userInventory
+                cout << "Which item would you like to drop: ";
+            }
+            
+        }
+        else if (strcmp(command, "inventory") == 0) {
+            cout << "---------------------------" << endl;
+            cout << "User Inventory: " << endl;
+        
+            vector<Item*>::iterator it;
+            for (it = userInventory.begin(); it < userInventory.end(); ++it) 
+            cout << (*it)->name << " " << endl;
+            cout << "---------------------------" << endl;
+        }
+        else if (strcmp(command, "quit") == 0) {//command is "quit"
+            cont = false;
+        }
+        else {
+            cout <<"Not sure what you mean" << endl;
         }
     }
     return 0;

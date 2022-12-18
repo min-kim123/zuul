@@ -2,6 +2,7 @@
 #include "room.h"
 #include <string.h>
 #include <vector>
+#include <iterator>
 #include <unordered_map>
 using namespace std;
 
@@ -17,55 +18,64 @@ char* Room::getDescription() {
     return description;
 }
 
-
 void Room::setExit(char* direction, Room* exit) {
     pair<char*, Room*> objPair(direction, exit);
-    cout << direction << ":" << exit->label << endl;
     exits.insert(objPair);
 }
 
 
 //loop through every instance of map for the current room and return the direction for 
 bool Room::checkExit(char *command) {
-    cout << "CHECKEXIT" << endl;
     int count = 0;
     unordered_map<char*,Room*>::iterator it;
 
     for (it = exits.begin(); it != exits.end(); ++it) {
-        cout << it->first << ":" << it->second->label << endl;//
-
         for (int i = 0; i < 2; ++i){
             if (it->first[i] == command[i]) {
-                cout <<"it i: "<<it->first[i] << " command i: " << command[i] << endl;//
                 count+=1;
-                cout << "count: " << count << endl;//
             }
         }
         if (count >= 2) {//if first 2 letters of the command match with one of the values for map return true
-            cout << "true" << endl;//
             return true;
         }
     }
-    cout << false << endl;
     return false;
 }
 
 Room* Room::getNextRoom(char* command) {
-    cout << "GETNEXTROOM" << endl;
     int count = 0;
     unordered_map<char*,Room*>::iterator it;
     for (it = exits.begin(); it != exits.end(); ++it) {
-        cout << it->first << ":" << it->second->label << endl;//
         for (int i = 0; i < 2; ++i){
             if (it->first[i] == command[i]) {
-                cout <<"it i: "<<it->first[i] << " command i: " << command[i] << endl;//
                 count+=1;
-                cout << "count: " << count << endl;//
             }
         }
         if (count >= 2) {//if first 2 letters of the command match with one of the values for map return true
             return it->second;
         }
     }
+}
+
+void Room::setItem(Item* newitem) {
+    roomInventory.push_back(newitem);
+}
+
+void Room::printItems() {
+    vector<Item*>::iterator it;
+    for (it = roomInventory.begin(); it < roomInventory.end(); ++it) 
+    cout << (*it)->name << " ";
+}
+
+int Room::getInventorySize() {
+    return roomInventory.size();
+}
+
+int Room::whichItem(char* item) {//check if it item exists and return roomInventory index
+
+}
+
+void Room::deleteItem(int itemIndex) {
+    roomInventory.erase(roomInventory.begin() + itemIndex);
 
 }

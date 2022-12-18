@@ -2,9 +2,11 @@
 #pragma once
 #include <vector>
 #include <unordered_map>
+#include "item.h"
 using namespace std;
 
 class Room {
+//ROOMS
     public:
     char label[80];
     char description[80];
@@ -13,9 +15,24 @@ class Room {
     void setDescription(char newdescription[80]);
     char* getDescription();
 
-//use a map for the exits instead of a vector
+//EXITS
+//unordered map of exits specific to each room
     unordered_map<char*, Room*>exits;
+
     void setExit(char*, Room*);
     Room* getNextRoom(char*);
     bool checkExit(char*);
+
+//ITEMS
+//vector of Items specific to each room
+    vector<Item*>roomInventory;
+
+    void setItem(Item*);
+    void printItems();
+    int getInventorySize();
+    int whichItem(char*);
+    void deleteItem(int);
+    //getItem
+    //void dropitem-take out of user inventory, add to currentRoom inventory vector
+    
 };
