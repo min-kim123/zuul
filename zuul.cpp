@@ -1,3 +1,8 @@
+/*
+Author: Min Kim
+Program Description: This is a simple text-based game whereyou will have to navigate through 23rd, pick up all 5 items, and drop them in FedEx to win.
+Date: 12/18/22
+*/
 #include <iostream>
 #include <cstring>
 #include <string.h>
