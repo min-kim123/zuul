@@ -8,8 +8,8 @@ using namespace std;
 class Room {
 //ROOMS
     public:
-    char label[80];
-    char description[80];
+    char label[80];//label for the room 
+    char description[80];//descriptino for the room
 
     void setLabel(char newlabel[80]);
     void setDescription(char newdescription[80]);
@@ -30,7 +30,6 @@ class Room {
     void setItem(Item*);
     void printItems();
     int getInventorySize();
-    int whichItem(char*);
     void deleteItem(int);
     //getItem
     //void dropitem-take out of user inventory, add to currentRoom inventory vector

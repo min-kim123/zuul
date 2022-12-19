@@ -72,20 +72,30 @@ int main() {
     rooms.push_back(snowPeak);
 
     //ITEMS
+    char itemName[20];
     Item *iceCream = new Item;
-    iceCream->setName("icecream");
+    strcpy(itemName, "icecream");
+    iceCream->setName(itemName);
     saltAndStraw->setItem(iceCream);
+
     Item *coffee = new Item;
-    coffee->setName("coffee");
+    strcpy(itemName, "coffee");
+    coffee->setName(itemName);
     caseStudyCoffee->setItem(coffee);
+
     Item *pamphlet = new Item;
-    pamphlet->setName("pamphlet");
+    strcpy(itemName, "pamphlet");
+    pamphlet->setName(itemName);
     rehab->setItem(pamphlet);
+
     Item *bandaid = new Item;
-    bandaid->setName("bandaid");
+    strcpy(itemName, "bandaid");
+    bandaid->setName(itemName);
     emergencyRoom->setItem(bandaid);
+
     Item *pot = new Item;
-    pot->setName("pot");
+    strcpy(itemName, "pot");
+    pot->setName(itemName);
     potteryBarn->setItem(pot);
 
     char north[10] = "north";
@@ -159,8 +169,8 @@ int main() {
         if (currentRoom->checkExit(command) == true) {//command is either north, east, south, or west
             currentRoom = currentRoom->getNextRoom(command);//currentroom becomes the nextroom corresponded with the exit
         }
-
         else if ((command[0] == 'g') && (command[1] == 'e')) {//GET ITEM
+            cout << "get" << endl;
             //if there is only one item, get that, if not ask what item
             if (currentRoom->getInventorySize() == 0) {//no items in roomInventory
                 cout << "No items in this room!" << endl;
@@ -174,25 +184,55 @@ int main() {
             }
             else {//multiple items in roomInventory
                 cout << "Which item would you like to get: ";
-                cin.getline(item, 20);
-                currentRoom->whichItem(item);
-                //if (currentRoom->whichItem(item)== true)//check if it exists and return
+                cin.getline(item,20);
+                int i = 0;
+                for (i = 0; i < currentRoom->getInventorySize(); ++i) {
+                    if (strcmp(item, currentRoom->roomInventory[i]->name) == 0) {
+                        //add item into userInventory
+                        userInventory.push_back(currentRoom->roomInventory[i]);
+                        //delete item from currentRoom
+                        currentRoom->deleteItem(i);
+                    }
+                }
             }
         }
-        
         else if ((command[0] == 'd') && (command[1] == 'r')) {//DROP ITEM
             if (userInventory.size() == 0) {//no items in userInventory
                 cout << "No items in your inventory!" << endl;
             }
             else if (userInventory.size() == 1) {//one item in userInventory
+                //add item to currentRoom
+                currentRoom->setItem(userInventory[0]);
                 //drop the item
                 userInventory.erase(userInventory.begin() + 0);
                 cout << "Item has been dropped!" << endl;
+                if (currentRoom == fedEx) {//if fedEx roomInventory has 5 items
+                    if (currentRoom->getInventorySize() == 5) {//WINNING CONDITION
+                        cout << "All 5 items have been dropped in FedEx!" << endl;
+                        cout << "You win!!!!";
+                        cont = false;
+                    }
+                }
             }
             else {//multiple items in userInventory
                 cout << "Which item would you like to drop: ";
+                cin.getline(item, 20);
+                //if the input name is equal to the userInventory.name, add the item to currentRoom and drop from userInventory
+                //find the index of the item to be dropped in userInventory
+                int i = 0;
+                for (i = 0; i < userInventory.size(); ++i) {
+                    if (strcmp(item, userInventory[i]->name) == 0) {
+                        break;
+                    }
+                }
+                //add item to currentRoom
+                currentRoom->setItem(userInventory[i]);
+                //erase item from inventory
+                userInventory.erase(userInventory.begin() + i);
+
+                //currentRoom->setItem(userInventory[i]);//replacing with this causes segmentation fault:11
+                cout <<"Item has been dropped!" << endl;
             }
-            
         }
         else if (strcmp(command, "inventory") == 0) {
             cout << "---------------------------" << endl;

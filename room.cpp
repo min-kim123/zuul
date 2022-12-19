@@ -61,7 +61,9 @@ void Room::setItem(Item* newitem) {
     roomInventory.push_back(newitem);
 }
 
-void Room::printItems() {
+
+
+void Room::printItems() {//trying to access memory i shouldnt??
     vector<Item*>::iterator it;
     for (it = roomInventory.begin(); it < roomInventory.end(); ++it) 
     cout << (*it)->name << " ";
@@ -71,11 +73,6 @@ int Room::getInventorySize() {
     return roomInventory.size();
 }
 
-int Room::whichItem(char* item) {//check if it item exists and return roomInventory index
-
-}
-
 void Room::deleteItem(int itemIndex) {
     roomInventory.erase(roomInventory.begin() + itemIndex);
-
 }
