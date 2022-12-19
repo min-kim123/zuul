@@ -136,7 +136,8 @@ int main() {
     pineStateBiscuits->setExit(east, jackInTheBox);
 
     jackInTheBox->setExit(east, bambooSushi);
-    jackInTheBox->setExit(south, ERparking);
+    jackInTheBox->setExit(south, littleBigBurger);
+    jackInTheBox->setExit(west, pineStateBiscuits);
 
     khaoSoy->setExit(south, grassa);
 
